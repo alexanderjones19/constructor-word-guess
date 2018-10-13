@@ -11,7 +11,7 @@ const game = {
             this.lettersGuessed.push(letter);
             this.guessesRemaining--;
             this.currentWord.guess(letter);
-            if (this.currentWord.word.includes(letter)) {
+            if (this.currentWord.word.toUpperCase().includes(letter)) {
                 console.log('\nCORRECT!\n');
                 console.log('Guesses Remaining: ' + this.guessesRemaining + '\n');
             }
@@ -19,12 +19,11 @@ const game = {
                 console.log('\nINCORRECT!\n');
                 console.log('Guesses Remaining: ' + this.guessesRemaining + '\n');
             }
-            console.log('current word', this.currentWord.word);
-            console.log(this.currentWord.toString().split('').join(' '));
+            console.log(this.currentWord.toString().split('').join(' ') + '\n');
             this.checkForWin();
         }
         else {
-            console.log('Letter has already been guessed. Guess another.');
+            console.log('\nLetter has already been guessed. Guess another.\n');
             this.userInquire();
         }
     },
@@ -49,7 +48,7 @@ const game = {
                     game.guess(answer.letter.toUpperCase());
                 }
                 else if (answer.letter.length < 1 || answer.letter.length > 1) {
-                    console.log('\nPlease guess only one character.\n');
+                    console.log('\nPlease guess exactly one character.\n');
                     game.userInquire();
                 }
                 else if (/^[a-z]+$/i.test(answer.letter) === false) {
@@ -59,8 +58,16 @@ const game = {
             });
     },
     checkForWin: function() {
-        if (this.guessesRemaining === 0 || !this.currentWord.toString().includes('_')) {
-            console.log('\nYou got it right! Next word!\n')
+        if (this.guessesRemaining === 0 && !this.currentWord.toString().includes('_')) {
+            console.log('\nYou got it right on the last try, good job! Next word!\n');
+            this.nextWord();
+        }
+        else if (!this.currentWord.toString().includes('_')) {
+            console.log('\nYou got it right! Next word!\n');
+            this.nextWord();
+        }
+        else if (this.guessesRemaining === 0 && this.currentWord.toString().includes('_')) {
+            console.log('\nOut of guesses! Next Word!\n');
             this.nextWord();
         }
         else {
